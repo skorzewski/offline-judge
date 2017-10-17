@@ -1,7 +1,9 @@
+PREFIX=$(ppr)
+
 ALL_BIN_FILES=$(subst .c,,$(shell ls *.c))
-ALL_EXP_FILES=$(subst .c,.exp,$(shell ls ??????.c))
-ALL_DIFF_FILES=$(subst .c,.diff,$(shell ls ????????????.c))
-ALL_FAIL_FILES=$(subst .c,.fail,$(shell ls ??????.c))
+ALL_EXP_FILES=$(subst .c,.exp,$(shell ls $(PREFIX)???.c))
+ALL_DIFF_FILES=$(subst .c,.diff,$(shell ls $(PREFIX)?????????.c))
+ALL_FAIL_FILES=$(subst .c,.fail,$(shell ls $(PREFIX)???.c))
 
 all: bin exp test fail
 
@@ -25,7 +27,7 @@ fail: $(ALL_FAIL_FILES)
 
 %.diff: %.ou
 	$(eval EXPFILE := $(shell echo $< | sed 's/[0-9][0-9][0-9][0-9][0-9][0-9][.]ou$$/.exp/'))
-	diff $< $(EXPFILE) >$@
+	-diff $< $(EXPFILE) >$@
 
 %.fail: %
 	./show_failures.sh $* >$@
@@ -39,5 +41,5 @@ clean:
 	rm -f *.diff
 	rm -f *.ou
 	rm -f *.exp
-	rm -f ????????????
-	rm -f ??????
+	rm -f $(PREFIX)?????????
+	rm -f $(PREFIX)???
